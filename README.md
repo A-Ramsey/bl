@@ -1,5 +1,7 @@
 # Better ls (bl)
 
+[![Go](https://github.com/A-Ramsey/bl/actions/workflows/go.yml/badge.svg)](https://github.com/A-Ramsey/bl/actions/workflows/go.yml)
+
 This is a command written in go designed to improve upon ls by adding better options for the output
 
 ## How to install
