@@ -71,6 +71,8 @@ func interateFiles(path string, iterationDepth int, maxDepth int) {
 		fmt.Print(" ")
 		fmt.Print(group)
 		fmt.Print(" ")
+		fmt.Print(info.ModTime().Format("Jan 02 15:04"))
+		fmt.Print(" ")
 		fmt.Print(colour)
 		fmt.Print(file.Name())
 		fmt.Print(Reset)
