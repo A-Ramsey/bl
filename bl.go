@@ -4,7 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
+	"strconv"
 	"strings"
+	"syscall"
 )
 
 var (
@@ -48,9 +51,32 @@ func interateFiles(path string, iterationDepth int, maxDepth int) {
 		if err != nil {
 			fmt.Println(buildIterationPrecursor(iterationDepth), err)
 		}
-		fmt.Println(buildIterationPrecursor(iterationDepth), info.Mode(), colour, file.Name(), Reset)
+		filePath := path + "/" + file.Name()
+		osStat, _ := os.Stat(filePath)
+		username, group := "", ""
+		if stat, ok := osStat.Sys().(*syscall.Stat_t); ok {
+			UID := strconv.FormatInt(int64(stat.Uid), 10)
+			GID := strconv.FormatInt(int64(stat.Gid), 10)
+			cmdUsername, _ := exec.Command("id", "-nu", UID).CombinedOutput()
+			cmdGroup, _ := exec.Command("id", "-ng", GID).CombinedOutput()
+			username, group = strings.TrimSpace(string(cmdUsername)), strings.TrimSpace(string(cmdGroup))
+		}
+
+		// Output File Info
+		fmt.Print(buildIterationPrecursor(iterationDepth))
+		fmt.Print(" ")
+		fmt.Print(info.Mode())
+		fmt.Print(" ")
+		fmt.Print(username)
+		fmt.Print(" ")
+		fmt.Print(group)
+		fmt.Print(" ")
+		fmt.Print(colour)
+		fmt.Print(file.Name())
+		fmt.Print(Reset)
+		fmt.Print("\n")
 		if file.IsDir() && iterationDepth < maxDepth {
-			interateFiles(path+"/"+file.Name(), iterationDepth+1, maxDepth)
+			interateFiles(filePath, iterationDepth+1, maxDepth)
 		}
 	}
 }
