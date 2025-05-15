@@ -1,4 +1,4 @@
-module A-Ramsey/cli-tools/bl
+module github.com/A-Ramsey/bl
 
 go 1.24
 
