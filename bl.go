@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+
+	"github.com/inhies/go-bytesize"
 )
 
 var (
@@ -62,6 +64,9 @@ func interateFiles(path string, iterationDepth int, maxDepth int) {
 			username, group = strings.TrimSpace(string(cmdUsername)), strings.TrimSpace(string(cmdGroup))
 		}
 
+		// We always know it the starting number will be bytes so add " b"
+		size, err := bytesize.Parse(strconv.FormatInt(info.Size(), 10) + " b")
+
 		// Output File Info
 		fmt.Print(buildIterationPrecursor(iterationDepth))
 		fmt.Print(" ")
@@ -70,6 +75,8 @@ func interateFiles(path string, iterationDepth int, maxDepth int) {
 		fmt.Print(username)
 		fmt.Print(" ")
 		fmt.Print(group)
+		fmt.Print(" ")
+		fmt.Printf("%s", size.Format("%.0f", "", false))
 		fmt.Print(" ")
 		fmt.Print(info.ModTime().Format("Jan 02 15:04"))
 		fmt.Print(" ")
